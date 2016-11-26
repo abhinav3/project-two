@@ -17,7 +17,7 @@ import java.net.URL;
 public class NetworkTaskActivity extends AsyncTask<String, Void, String> {
 
     private final String LOG_TAG = NetworkTaskActivity.class.getSimpleName();
-    public static final String THE_MOVIE_DB_API_KEY = "key";
+    public static final String THE_MOVIE_DB_API_KEY = "24c92c0158254535df5f48cf5f8b6db2";
     
     @Override
     protected String doInBackground(String... params) {

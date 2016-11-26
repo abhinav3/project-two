@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private GridView gridView;
 
     //variable to save the instance
-    private String savedRequestType;
-    private String savedGridViewPosition;
+    private String savedRequestType = "savedRequestType";
+    private String savedGridViewPosition = "savedGridViewPosition";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +61,9 @@ public class MainActivity extends AppCompatActivity {
         gridView = (GridView) findViewById(R.id.gridView);
         REQUEST_MOVIE_BY = POPULAR;
         if(savedInstanceState != null){
-            REQUEST_MOVIE_BY= (String) savedInstanceState.get(savedRequestType);
-            gridView.setSelection((Integer) savedInstanceState.get(savedGridViewPosition));
+            //debug whether app state is being restored.
+            //Toast.makeText(this.getApplicationContext(), "REQUEST_MOVIE_BY" + REQUEST_MOVIE_BY, Toast.LENGTH_SHORT).show();
+            Log.d(LOG_TAG, "REQUEST_MOVIE_BY" + REQUEST_MOVIE_BY);
         }
         NetworkUtil networkUtil = new NetworkUtil(this);
         if(!networkUtil.isInternetWorking()){
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Save the request_by and grid position, helpful while recreating the activity during app rotation etc.
     @Override
     public void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
@@ -79,13 +82,15 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt(savedGridViewPosition, position);
     }
 
-//    public void onRestoreInstanceState(Bundle savedInstanceState) {
-//        // Always call the superclass so it can restore the view hierarchy
-//        super.onRestoreInstanceState(savedInstanceState);
-//
-//        // Restore state members from saved instance
-//        REQUEST_MOVIE_BY= savedInstanceState.get(savedRequestType);
-//    }
+    // Restore the request_by and grid position.
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore state members from saved instance
+        REQUEST_MOVIE_BY= savedInstanceState.getString(savedRequestType);
+        gridView.setSelection( savedInstanceState.getInt(savedGridViewPosition));
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
