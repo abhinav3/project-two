@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -150,9 +149,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private List<String> getMoviePosters(String request_movie_by) throws Exception {
-        NetworkTaskActivity networkTaskActivity = new NetworkTaskActivity();
+        NetworkTask networkTask = new NetworkTask();
         try {
-            String movieResponse = networkTaskActivity.execute(request_movie_by).get();
+            String movieResponse = networkTask.execute(request_movie_by).get();
             //Toast.makeText(getApplicationContext(),movieResponse,Toast.LENGTH_LONG).show();
             Log.d(LOG_TAG, "movieResponse : " + movieResponse);
             if (movieResponse != null) {
