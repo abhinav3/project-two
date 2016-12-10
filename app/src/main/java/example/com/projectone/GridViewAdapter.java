@@ -3,6 +3,7 @@ package example.com.projectone;
 import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,21 +50,38 @@ public class GridViewAdapter extends BaseAdapter {
         return i;
     }
 
+    class MyViewHolder{
+        ImageView imageView;
+        MyViewHolder(View v){
+
+            //If we use ViewHolder patten, then findViewById is called exactly once when constructor is used.
+            imageView = (ImageView) v.findViewById(R.id.grid_image);
+        }
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        ImageView imageView;
+        MyViewHolder myViewHolder = null;
+        // create the new row and holder for the first time.
         if(row == null){
+            //inflates only for the first time.
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             row = inflater.inflate(R.layout.grid_item_layout, parent, false);
-
+            myViewHolder = new MyViewHolder(row);
+            row.setTag(myViewHolder);
+            Log.d("Abhinav", "Creating the row");
         }
-        imageView = (ImageView) row.findViewById(R.id.grid_image);
+        //Now whenever i'm recycling i'm using the same holder
+        else{
+            myViewHolder = (MyViewHolder)row.getTag();
+            Log.d("Abhinav", "Recycling the row");
+        }
 
         Picasso.with(mContext)
                 .load(moviePosters.get(position))
                 .placeholder(new ColorUtil().getRandomDrawbleColor())
-                .into(imageView);
+                .into(myViewHolder.imageView);
         return row;
     }
 
