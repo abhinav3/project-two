@@ -6,29 +6,29 @@ package example.com.projectone.models;
 
 
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 
 // Used org.jsonschema2pojo to generate this class from the JSON response of api.
-public class MovieResponse {
+public class MovieResponse implements Serializable{
 
-    private Integer page;
-    private List<Result> results = new ArrayList<Result>();
-    private Integer totalResults;
-    private Integer totalPages;
+    private String page;
+    private List<Result> results;
+    private String total_results;
+    private String total_pages;
 
     /**
      * @return The page
      */
-    public Integer getPage() {
+    public String getPage() {
         return page;
     }
 
     /**
      * @param page The page
      */
-    public void setPage(Integer page) {
+    public void setPage(String page) {
         this.page = page;
     }
 
@@ -47,31 +47,31 @@ public class MovieResponse {
     }
 
     /**
-     * @return The totalResults
+     * @return The total_results
      */
-    public Integer getTotalResults() {
-        return totalResults;
+    public String getTotal_results() {
+        return total_results;
     }
 
     /**
-     * @param totalResults The total_results
+     * @param total_results The total_results
      */
-    public void setTotalResults(Integer totalResults) {
-        this.totalResults = totalResults;
+    public void setTotal_results(String total_results) {
+        this.total_results = total_results;
     }
 
     /**
-     * @return The totalPages
+     * @return The total_pages
      */
-    public Integer getTotalPages() {
-        return totalPages;
+    public String getTotal_pages() {
+        return total_pages;
     }
 
     /**
-     * @param totalPages The total_pages
+     * @param total_pages The total_pages
      */
-    public void setTotalPages(Integer totalPages) {
-        this.totalPages = totalPages;
+    public void setTotal_pages(String total_pages) {
+        this.total_pages = total_pages;
     }
 
     @Override
@@ -79,8 +79,8 @@ public class MovieResponse {
         return "MovieResponse{" +
                 "page=" + page +
                 ", results=" + results +
-                ", totalResults=" + totalResults +
-                ", totalPages=" + totalPages +
+                ", total_results=" + total_results +
+                ", total_pages=" + total_pages +
                 '}';
     }
 }

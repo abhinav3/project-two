@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.squareup.okhttp.*;
+
 /**
  * Created by Abhinav Ravi on 22/11/16.
  */
@@ -31,14 +33,18 @@ public class NetworkUtil {
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
+    //TODO : Have to implement this in background thread.
     public static boolean isInternetWorking2() {
         boolean success = false;
         try {
             URL url = new URL("https://google.com");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setConnectTimeout(10000);
-            connection.connect();
-            success = connection.getResponseCode() == 200;
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            OkHttpClient client = new OkHttpClient();
+            Response response = client.newCall(request).execute();
+
+            success = response.code() == 200;
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -8,9 +8,9 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.URL;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import com.squareup.okhttp.*;
+
+import example.com.projectone.util.KEY_EXTRA;
 
 /**
  * Created by Abhinav Ravi on 15/10/16.
@@ -51,8 +51,8 @@ public class NetworkTask extends AsyncTask<String, Void, String> {
                     .build();
 
             Response response = client.newCall(request).execute();
-            movieResponse = response.body().toString();
-            Log.d(LOG_TAG,movieResponse);
+            movieResponse = response.body().string();
+            Log.d(LOG_TAG ,movieResponse);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the movieResponse data, return null.

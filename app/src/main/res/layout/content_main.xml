@@ -8,6 +8,32 @@
     tools:context="example.com.projectone.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <ImageView
+            android:id="@+id/errimg"
+            android:layout_width="69dp"
+            android:layout_height="69dp"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:src="@android:drawable/stat_notify_error"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/errtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginTop="50sp"
+            android:text="Network Error !"
+            android:visibility="invisible"
+            android:textSize="24dp" />
+    </FrameLayout>
+
     <GridView
         android:id="@+id/gridView"
         android:layout_width="match_parent"
@@ -24,7 +50,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        />
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -32,6 +59,8 @@
         android:id="@+id/progressBar"
         android:layout_centerInParent="true"
         android:visibility="gone"/>
+
+
 
 
 </RelativeLayout>
