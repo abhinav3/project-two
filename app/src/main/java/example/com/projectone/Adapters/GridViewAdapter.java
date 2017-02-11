@@ -1,4 +1,4 @@
-package example.com.projectone;
+package example.com.projectone.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import example.com.projectone.R;
 import example.com.projectone.util.ColorUtil;
 
 /**

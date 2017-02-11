@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -20,6 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import example.com.projectone.Adapters.CustomerTrailerAdapter;
 import example.com.projectone.models.Result;
 import example.com.projectone.models.review.ReviewResults;
 import example.com.projectone.models.review.Reviews;
@@ -39,6 +43,11 @@ import retrofit.client.Response;
 public class MovieDetailActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MovieDetailActivity.class.getSimpleName();
+    private static RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private static RecyclerView.Adapter adapter;
+    private VideosResults[] videosResultses;
+
     private Realm realm;
     private String POSTER_URL = "http://image.tmdb.org/t/p/w500/";
     @Override
@@ -68,6 +77,16 @@ public class MovieDetailActivity extends AppCompatActivity {
         story_review.setMovementMethod(new ScrollingMovementMethod());
 
 
+        //set card view adapter
+        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        //recyclerView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        //recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Result result = (Result)getIntent().getSerializableExtra(KEY_EXTRA.Result.getDescription());
@@ -80,6 +99,10 @@ public class MovieDetailActivity extends AppCompatActivity {
         release_date.setText(result.getRelease_date());
         getMovieReview(story_review, result.getResultId());
         getMovieTrailers(story_review,result.getResultId());
+
+
+
+
         ImageView imageView = (ImageView) findViewById(R.id.header);
         Log.d(LOG_TAG,"Poster Path" +result.getBackdrop_path() + " title " + result.getOriginal_title());
 
@@ -101,6 +124,8 @@ public class MovieDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+
     }
 
 
@@ -199,14 +224,15 @@ public class MovieDetailActivity extends AppCompatActivity {
 
             @Override
             public void success(Videos videos, Response response) {
-                VideosResults[] videosResultses = videos.getResults();
+                videosResultses = videos.getResults();
                 if (videosResultses.length > 0){
-                    Log.d(LOG_TAG, videosResultses.toString());
-                    ((TextView) review).setText(videosResultses.toString());
+                    //set card view trailers data
+                    adapter = new CustomerTrailerAdapter(videosResultses);
+                    recyclerView.setAdapter(adapter);
+                    Log.e(LOG_TAG, "***************************************************************"+videosResultses.toString());
                 }
                 else
-                    Log.d(LOG_TAG, "not setting viders");
-
+                    Log.e(LOG_TAG, "not setting viders");
             }
 
             @Override

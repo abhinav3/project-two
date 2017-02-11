@@ -15,12 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import example.com.projectone.Adapters.GridViewAdapter;
 import example.com.projectone.models.MovieResponse;
 import example.com.projectone.models.Result;
 import example.com.projectone.services.MovieService;
