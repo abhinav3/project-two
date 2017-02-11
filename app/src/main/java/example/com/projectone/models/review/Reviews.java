@@ -1,4 +1,4 @@
-package example.com.projectone.models;
+package example.com.projectone.models.review;
 
 /**
  * Created by Abhinav Ravi on 07/02/17.

@@ -18,10 +18,13 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 
-import example.com.projectone.models.MovieResponse;
+import java.util.List;
+
 import example.com.projectone.models.Result;
-import example.com.projectone.models.ReviewResults;
-import example.com.projectone.models.Reviews;
+import example.com.projectone.models.review.ReviewResults;
+import example.com.projectone.models.review.Reviews;
+import example.com.projectone.models.youTube.Videos;
+import example.com.projectone.models.youTube.VideosResults;
 import example.com.projectone.services.MovieService;
 import example.com.projectone.util.ColorUtil;
 import example.com.projectone.util.KEY_EXTRA;
@@ -37,6 +40,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MovieDetailActivity.class.getSimpleName();
     private Realm realm;
+    private String POSTER_URL = "http://image.tmdb.org/t/p/w500/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,11 +79,12 @@ public class MovieDetailActivity extends AppCompatActivity {
         overView.setText(result.getOverview());
         release_date.setText(result.getRelease_date());
         getMovieReview(story_review, result.getResultId());
+        getMovieTrailers(story_review,result.getResultId());
         ImageView imageView = (ImageView) findViewById(R.id.header);
         Log.d(LOG_TAG,"Poster Path" +result.getBackdrop_path() + " title " + result.getOriginal_title());
 
         Picasso.with(this)
-                .load("http://image.tmdb.org/t/p/w500/"+result.getBackdrop_path())
+                .load(POSTER_URL+result.getBackdrop_path())
                 .placeholder(new ColorUtil().getRandomDrawbleColor())
                 .into(imageView);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -168,7 +173,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     protected void getMovieReview(final View review, String id) {
         MovieService movieService = NetworkServiceBuilder.createService(MovieService.class);
-        movieService.fetchReview("24c92c0158254535df5f48cf5f8b6db2", id, new Callback<Reviews>() {
+        movieService.fetchReview(KEY_EXTRA.KEY.getDescription(), id, new Callback<Reviews>() {
 
             @Override
             public void success(Reviews movieReview, Response response) {
@@ -177,6 +182,30 @@ public class MovieDetailActivity extends AppCompatActivity {
                     ((TextView) review).setText(movieResult[0].getContent());
                 else
                     ((TextView) review).setText("Sorry No Review is Available Till Now!");
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("error", error.toString());
+                ((TextView) review).setText("Sorry! Check Back Latter! Network Error!");
+            }
+        });
+    }
+
+    protected void getMovieTrailers(final View review, String id) {
+        MovieService movieService = NetworkServiceBuilder.createService(MovieService.class);
+        movieService.fetchVideos(KEY_EXTRA.KEY.getDescription(), id, new Callback<Videos>() {
+
+            @Override
+            public void success(Videos videos, Response response) {
+                VideosResults[] videosResultses = videos.getResults();
+                if (videosResultses.length > 0){
+                    Log.d(LOG_TAG, videosResultses.toString());
+                    ((TextView) review).setText(videosResultses.toString());
+                }
+                else
+                    Log.d(LOG_TAG, "not setting viders");
 
             }
 

@@ -1,7 +1,8 @@
 package example.com.projectone.services;
 
 import example.com.projectone.models.MovieResponse;
-import example.com.projectone.models.Reviews;
+import example.com.projectone.models.review.Reviews;
+import example.com.projectone.models.youTube.Videos;
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Path;
@@ -31,7 +32,7 @@ public interface MovieService {
     void fetchVideos(
             @Query("api_key") String mApiKey,
             @Path("id") String id,
-            Callback<MovieResponse> cb
+            Callback<Videos> cb
     );
 
 }
