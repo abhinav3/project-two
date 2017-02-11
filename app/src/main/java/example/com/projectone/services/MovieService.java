@@ -1,6 +1,7 @@
 package example.com.projectone.services;
 
 import example.com.projectone.models.MovieResponse;
+import example.com.projectone.models.Reviews;
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Path;
@@ -19,14 +20,14 @@ public interface MovieService {
             Callback<MovieResponse> cb
     );
 
-    @GET("/3/movie/{id}/reviews")
+    @GET("/movie/{id}/reviews")
     void fetchReview(
             @Query("api_key") String mApiKey,
             @Path("id") String id,
-            Callback<MovieResponse> cb
+            Callback<Reviews> cb
     );
 
-    @GET("/3/movie/{id}/videos")
+    @GET("/movie/{id}/videos")
     void fetchVideos(
             @Query("api_key") String mApiKey,
             @Path("id") String id,

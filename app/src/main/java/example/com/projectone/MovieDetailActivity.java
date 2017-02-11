@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,12 +18,20 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 
+import example.com.projectone.models.MovieResponse;
 import example.com.projectone.models.Result;
+import example.com.projectone.models.ReviewResults;
+import example.com.projectone.models.Reviews;
+import example.com.projectone.services.MovieService;
 import example.com.projectone.util.ColorUtil;
 import example.com.projectone.util.KEY_EXTRA;
+import example.com.projectone.util.NetworkServiceBuilder;
 import example.com.projectone.util.NetworkUtil;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
@@ -51,6 +60,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         TextView reviewValue = (TextView) findViewById(R.id.reviewValue);
         TextView overView = (TextView) findViewById(R.id.overview);
         TextView release_date = (TextView) findViewById(R.id.release_date_value);
+        TextView story_review = (TextView) findViewById(R.id.story_review);
+        story_review.setMovementMethod(new ScrollingMovementMethod());
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -63,11 +74,12 @@ public class MovieDetailActivity extends AppCompatActivity {
         reviewValue.setText(result.getVote_count().toString());
         overView.setText(result.getOverview());
         release_date.setText(result.getRelease_date());
+        getMovieReview(story_review, result.getResultId());
         ImageView imageView = (ImageView) findViewById(R.id.header);
-        Log.d(LOG_TAG,"Poster Path" +result.getPoster_path() + " title " + result.getOriginal_title());
+        Log.d(LOG_TAG,"Poster Path" +result.getBackdrop_path() + " title " + result.getOriginal_title());
 
         Picasso.with(this)
-                .load("http://image.tmdb.org/t/p/w500/"+result.getPoster_path())
+                .load("http://image.tmdb.org/t/p/w500/"+result.getBackdrop_path())
                 .placeholder(new ColorUtil().getRandomDrawbleColor())
                 .into(imageView);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -152,5 +164,27 @@ public class MovieDetailActivity extends AppCompatActivity {
         //move back to parent activity.
         Intent upIntent = NavUtils.getParentActivityIntent(this);
         NavUtils.navigateUpTo(this, upIntent);
+    }
+
+    protected void getMovieReview(final View review, String id) {
+        MovieService movieService = NetworkServiceBuilder.createService(MovieService.class);
+        movieService.fetchReview("24c92c0158254535df5f48cf5f8b6db2", id, new Callback<Reviews>() {
+
+            @Override
+            public void success(Reviews movieReview, Response response) {
+                ReviewResults[] movieResult = movieReview.getResults();
+                if (movieResult.length > 0)
+                    ((TextView) review).setText(movieResult[0].getContent());
+                else
+                    ((TextView) review).setText("Sorry No Review is Available Till Now!");
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("error", error.toString());
+                ((TextView) review).setText("Sorry! Check Back Latter! Network Error!");
+            }
+        });
     }
 }
