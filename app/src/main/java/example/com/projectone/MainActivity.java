@@ -319,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
         }
         Log.d(LOG_TAG, "Calling fetchMovie");
         MovieService movieService = NetworkServiceBuilder.createService(MovieService.class);
-        movieService.fetchMovies(REQUEST_MOVIE_BY, "24c92c0158254535df5f48cf5f8b6db2",  new Callback<MovieResponse>() {
+        movieService.fetchMovies(REQUEST_MOVIE_BY, KEY_EXTRA.KEY.getDescription(),  new Callback<MovieResponse>() {
                 @Override
                 public void success(MovieResponse movieResponse, Response response) {
                     mMovieResponse = movieResponse;
@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
     private void hideErrorMessageDialog() {
         errorImageview.setVisibility(View.INVISIBLE);
         errorTextView.setVisibility(View.INVISIBLE);
-        errorTextView.setText("Sorry!Network Error! check back Later");
+        errorTextView.setText("Network Error! Try in some time");
     }
 
     private void setMovieResponse(MovieResponse mMovieResponse){

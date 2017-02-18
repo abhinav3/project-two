@@ -18,7 +18,7 @@ import example.com.projectone.util.KEY_EXTRA;
 public class NetworkTask extends AsyncTask<String, Void, String> {
 
     private final String LOG_TAG = NetworkTask.class.getSimpleName();
-    public static final String THE_MOVIE_DB_API_KEY = "24c92c0158254535df5f48cf5f8b6db2";
+    public static final String THE_MOVIE_DB_API_KEY = KEY_EXTRA.KEY.getDescription();
     
     @Override
     protected String doInBackground(String... params) {

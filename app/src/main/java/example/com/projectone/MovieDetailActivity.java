@@ -241,14 +241,14 @@ public class MovieDetailActivity extends AppCompatActivity {
                 if (movieResult.length > 0)
                     ((TextView) review).setText(movieResult[0].getContent());
                 else
-                    ((TextView) review).setText("Sorry No Review is Available Till Now!");
+                    ((TextView) review).setText("Be the first to review");
 
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e("error", error.toString());
-                ((TextView) review).setText("Sorry! Check Back Latter! Network Error!");
+                ((TextView) review).setText("Network Error!");
             }
         });
     }
@@ -273,7 +273,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void failure(RetrofitError error) {
                 Log.e("error", error.toString());
-                ((TextView) review).setText("Sorry! Check Back Latter! Network Error!");
+                ((TextView) review).setText("Network Error!");
             }
         });
     }
