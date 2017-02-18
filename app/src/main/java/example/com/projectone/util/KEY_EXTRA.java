@@ -6,7 +6,7 @@ package example.com.projectone.util;
 public enum KEY_EXTRA {
     Result("Result"),
     IS_FAV("IS_FAV"),
-    KEY("24c92c0158254535df5f48cf5f8b6db2");
+    KEY("XXXXXXXXX");
 
     private String description;
 
