@@ -1,8 +1,11 @@
 package example.com.projectone;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
@@ -14,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +51,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private static RecyclerView.Adapter adapter;
     private VideosResults[] videosResultses;
-
     private Realm realm;
     private String POSTER_URL = "http://image.tmdb.org/t/p/w500/";
     @Override
@@ -84,7 +87,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         //recyclerView.setItemAnimator(new DefaultItemAnimator());
-
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -125,9 +127,42 @@ public class MovieDetailActivity extends AppCompatActivity {
             }
         });
 
+        ImageView shareImageView = (ImageView) findViewById(R.id.shareButton);
+        shareImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareYoutubeIntent();
+            }
+        });
+
 
     }
 
+    public  class MyOnClickListener implements View.OnClickListener {
+
+        private final Context context;
+
+        private MyOnClickListener(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void onClick(View view) {
+            int selectedItemPosition = recyclerView.getChildPosition(view);
+            watchYoutubeVideo(videosResultses[selectedItemPosition].getKey());
+        }
+    }
+
+    public void watchYoutubeVideo(String id) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+            startActivity(intent);
+        } catch (ActivityNotFoundException ex) {
+            Intent intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://www.youtube.com/watch?v=" + id));
+            startActivity(intent);
+        }
+    }
 
     private void showErrorMessageDialog() {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -227,12 +262,12 @@ public class MovieDetailActivity extends AppCompatActivity {
                 videosResultses = videos.getResults();
                 if (videosResultses.length > 0){
                     //set card view trailers data
-                    adapter = new CustomerTrailerAdapter(videosResultses);
+                    adapter = new CustomerTrailerAdapter(videosResultses, MovieDetailActivity.this);
                     recyclerView.setAdapter(adapter);
-                    Log.e(LOG_TAG, "***************************************************************"+videosResultses.toString());
+                    Log.e(LOG_TAG, "***************************************************************\n"+videosResultses.toString());
                 }
                 else
-                    Log.e(LOG_TAG, "not setting viders");
+                    Log.e(LOG_TAG, "not setting videos");
             }
 
             @Override
@@ -241,5 +276,23 @@ public class MovieDetailActivity extends AppCompatActivity {
                 ((TextView) review).setText("Sorry! Check Back Latter! Network Error!");
             }
         });
+    }
+
+    private void shareYoutubeIntent(){
+        String shareBody = "Find this exciting movie : ";
+        try {
+            if(videosResultses[0].getKey() != null && !videosResultses[0].getKey().isEmpty()){
+                String youTubeURL = "https://www.youtube.com/watch?v=" +  videosResultses[0].getKey();
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Sharing movie trailer with you");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody + youTubeURL);
+                startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_using)));
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "URLs still not loaded");
+
+        }
+
     }
 }

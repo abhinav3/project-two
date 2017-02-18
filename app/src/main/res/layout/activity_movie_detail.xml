@@ -88,7 +88,12 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
                         android:id="@+id/Trailers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -96,14 +101,25 @@
                         android:text="Trailers"
                         android:textColor="#000000"
                         android:textSize="20dp"
+                        android:layout_weight="1"
                         android:textStyle="normal|bold|italic" />
 
+                        <ImageButton
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:id="@+id/shareButton"
+                            android:src="@android:drawable/ic_menu_share"
+                            android:clickable="false" />
 
-                    <!--<include layout="@layout/cards_layout" />-->
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/my_recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                    </LinearLayout>
+                    <!--<include layout="@layout/cards_trailer_layout" />-->
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/my_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+
 
                 </LinearLayout>
 
